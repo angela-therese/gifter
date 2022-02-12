@@ -144,9 +144,15 @@ namespace Gifter.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                          SELECT Title, Caption, DateCreated, ImageUrl, UserProfileId
-                            FROM Post
-                           WHERE Id = @Id";
+                          SELECT p.Title, p.Caption, p.DateCreated AS PostDateCreated, p.ImageUrl, p.UserProfileId,
+
+                                  up.Name, up.Bio, up.Email, up.DateCreated AS UserProfileDateCreated,
+                                  up.ImageUrl AS UserProfileImageUrl
+
+                           FROM Post p
+                           LEFT JOIN UserProfile up ON p.UserProfileId = up.Id
+                           
+                            WHERE p.Id = @Id";
 
                     DbUtils.AddParameter(cmd, "@Id", id);
 
@@ -160,9 +166,17 @@ namespace Gifter.Repositories
                             Id = id,
                             Title = DbUtils.GetString(reader, "Title"),
                             Caption = DbUtils.GetString(reader, "Caption"),
-                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
+                            DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
                             ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
                             UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                            UserProfile = new UserProfile()
+                            {
+                                Id = DbUtils.GetInt(reader, "UserProfileId"),
+                                Name = DbUtils.GetString(reader, "Name"),
+                                Email = DbUtils.GetString(reader, "Email"),
+                                DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                                ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                            }
                         };
                     }
 
