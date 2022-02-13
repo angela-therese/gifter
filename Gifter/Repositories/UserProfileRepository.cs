@@ -19,7 +19,7 @@ namespace Gifter.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                SELECT ";
+                SELECT Id, Name, Email, ImageUrl, DateCreated, Bio FROM UserProfile";
 
                     var reader = cmd.ExecuteReader();
 
@@ -29,12 +29,12 @@ namespace Gifter.Repositories
                     {
                         userProfiles.Add(new UserProfile()
                         {
-                            //Id = DbUtils.GetInt(reader, "PostId"),
-                            //Name = DbUtils.GetString(reader, "Title"),
-                            //Email = DbUtils.GetString(reader, "Caption"),
-                            //DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
-                            //ImageUrl = DbUtils.GetString(reader, "PostImageUrl"),
-                            //Bio = DbUtils.GetString(reader, "UserProfileId")
+                            Id = DbUtils.GetInt(reader, "Id"),
+                            Name = DbUtils.GetString(reader, "Name"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
+                            Bio = DbUtils.GetString(reader, "Bio")
 
                         });
                     }
@@ -54,9 +54,8 @@ namespace Gifter.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                          SELECT
-                           
-                            WHERE up.Id = @Id";
+                          SELECT Id, Name, Email, ImageUrl, DateCreated, Bio FROM UserProfile
+                            WHERE Id = @Id";
 
                     DbUtils.AddParameter(cmd, "@Id", id);
 
@@ -67,12 +66,12 @@ namespace Gifter.Repositories
                     {
                         userProfile = new UserProfile()
                         {
-                            //Id = DbUtils.GetInt(reader, "PostId"),
-                            //Name = DbUtils.GetString(reader, "Title"),
-                            //Email = DbUtils.GetString(reader, "Caption"),
-                            //DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
-                            //ImageUrl = DbUtils.GetString(reader, "PostImageUrl"),
-                            //Bio = DbUtils.GetString(reader, "UserProfileId"),
+                            Id = DbUtils.GetInt(reader, "Id"),
+                            Name = DbUtils.GetString(reader, "Name"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
+                            Bio = DbUtils.GetString(reader, "Bio")
 
                         };
                     }
@@ -118,11 +117,12 @@ namespace Gifter.Repositories
                 {
                     cmd.CommandText = @"
                         UPDATE UserProfile
-                           SET Name = @Name,
+                           SET [Name] = @Name,
                                Email = @Email,
-                               ImageUrl = @ImageUrl
+                               ImageUrl = @ImageUrl,
+                               DateCreated = @DateCreated,
                                Bio = @Bio
-                               DateCreated = @DateCreated
+                               
                          WHERE Id = @Id";
 
                     DbUtils.AddParameter(cmd, "@Name", userProfile.Name);
