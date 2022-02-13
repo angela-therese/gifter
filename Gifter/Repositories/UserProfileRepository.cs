@@ -33,8 +33,9 @@ namespace Gifter.Repositories
                             Name = DbUtils.GetString(reader, "Name"),
                             Email = DbUtils.GetString(reader, "Email"),
                             ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
-                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
-                            Bio = DbUtils.GetString(reader, "Bio")
+                            Bio = DbUtils.GetString(reader, "Bio"),
+                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated")
+                            
 
                         });
                     }
@@ -70,8 +71,9 @@ namespace Gifter.Repositories
                             Name = DbUtils.GetString(reader, "Name"),
                             Email = DbUtils.GetString(reader, "Email"),
                             ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
-                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
-                            Bio = DbUtils.GetString(reader, "Bio")
+                            Bio = DbUtils.GetString(reader, "Bio"),
+                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated")
+                            
 
                         };
                     }
@@ -120,8 +122,8 @@ namespace Gifter.Repositories
                            SET [Name] = @Name,
                                Email = @Email,
                                ImageUrl = @ImageUrl,
-                               DateCreated = @DateCreated,
-                               Bio = @Bio
+                               Bio = @Bio,
+                               DateCreated = @DateCreated
                                
                          WHERE Id = @Id";
 
@@ -144,7 +146,7 @@ namespace Gifter.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "DELETE FROM Post WHERE Id = @Id";
+                    cmd.CommandText = "DELETE FROM UserProfile WHERE Id = @Id";
                     DbUtils.AddParameter(cmd, "@id", id);
                     cmd.ExecuteNonQuery();
                 }

@@ -165,17 +165,19 @@ namespace Gifter.Repositories
                         {
                             Id = id,
                             Title = DbUtils.GetString(reader, "Title"),
-                            Caption = DbUtils.GetString(reader, "Caption"),
-                            DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
                             ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                            Caption = DbUtils.GetString(reader, "Caption"),
                             UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                            DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
                             UserProfile = new UserProfile()
                             {
                                 Id = DbUtils.GetInt(reader, "UserProfileId"),
                                 Name = DbUtils.GetString(reader, "Name"),
                                 Email = DbUtils.GetString(reader, "Email"),
-                                DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
                                 ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                                Bio = DbUtils.GetString(reader, "Bio"),
+                                DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                                
                             }
                         };
                     }
@@ -219,16 +221,16 @@ namespace Gifter.Repositories
                         {
                             Id = id,
                             Title = DbUtils.GetString(reader, "Title"),
-                            Caption = DbUtils.GetString(reader, "Caption"),
-                            DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
                             ImageUrl = DbUtils.GetString(reader, "PostImageUrl"),
+                            Caption = DbUtils.GetString(reader, "Caption"),
                             UserProfileId = DbUtils.GetInt(reader, "PostUserProfileId"),
+                            DateCreated = DbUtils.GetDateTime(reader, "PostDateCreated"),
                             UserProfile = new UserProfile()
                             {
                                 Id = DbUtils.GetInt(reader, "PostUserProfileId"),
                                 Name = DbUtils.GetString(reader, "Name"),
                                 Email = DbUtils.GetString(reader, "Email"),
-                                DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                                DateCreated = DbUtils.GetDateTime(reader,"UserProfileDateCreated"),
                                 ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl")
                             },
                             Comments = new List<Comment>()
@@ -265,15 +267,15 @@ namespace Gifter.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO Post (Title, Caption, DateCreated, ImageUrl, UserProfileId)
+                        INSERT INTO Post (Title, ImageUrl, Caption, UserProfileId, DateCreated)
                         OUTPUT INSERTED.ID
-                        VALUES (@Title, @Caption, @DateCreated, @ImageUrl, @UserProfileId)";
+                        VALUES (@Title, @ImageUrl, @Caption, @UserProfileId, @DateCreated )";
 
                     DbUtils.AddParameter(cmd, "@Title", post.Title);
-                    DbUtils.AddParameter(cmd, "@Caption", post.Caption);
-                    DbUtils.AddParameter(cmd, "@DateCreated", post.DateCreated);
                     DbUtils.AddParameter(cmd, "@ImageUrl", post.ImageUrl);
+                    DbUtils.AddParameter(cmd, "@Caption", post.Caption);
                     DbUtils.AddParameter(cmd, "@UserProfileId", post.UserProfileId);
+                    DbUtils.AddParameter(cmd, "@DateCreated", post.DateCreated);
 
                     post.Id = (int)cmd.ExecuteScalar();
                 }
@@ -290,18 +292,26 @@ namespace Gifter.Repositories
                     cmd.CommandText = @"
                         UPDATE Post
                            SET Title = @Title,
-                               Caption = @Caption,
-                               DateCreated = @DateCreated,
                                ImageUrl = @ImageUrl,
-                               UserProfileId = @UserProfileId
+                               Caption = @Caption,
+                                UserProfileId = @UserProfileId,
+                               DateCreated = @DateCreated
+                              
+                               
+                               
+                             
                          WHERE Id = @Id";
 
+                    
                     DbUtils.AddParameter(cmd, "@Title", post.Title);
-                    DbUtils.AddParameter(cmd, "@Caption", post.Caption);
-                    DbUtils.AddParameter(cmd, "@DateCreated", post.DateCreated);
                     DbUtils.AddParameter(cmd, "@ImageUrl", post.ImageUrl);
+                    DbUtils.AddParameter(cmd, "@Caption", post.Caption);
                     DbUtils.AddParameter(cmd, "@UserProfileId", post.UserProfileId);
+                    DbUtils.AddParameter(cmd, "@DateCreated", post.DateCreated);
+                    
+                   
                     DbUtils.AddParameter(cmd, "@Id", post.Id);
+
 
                     cmd.ExecuteNonQuery();
                 }
