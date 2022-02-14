@@ -35,7 +35,7 @@ namespace Gifter.Repositories
                             ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
                             Bio = DbUtils.GetString(reader, "Bio"),
                             DateCreated = DbUtils.GetDateTime(reader, "DateCreated")
-                            
+
 
                         });
                     }
@@ -73,7 +73,7 @@ namespace Gifter.Repositories
                             ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
                             Bio = DbUtils.GetString(reader, "Bio"),
                             DateCreated = DbUtils.GetDateTime(reader, "DateCreated")
-                            
+
 
                         };
                     }
@@ -85,39 +85,101 @@ namespace Gifter.Repositories
             }
         }
 
-
-
-        public void Add(UserProfile userProfile)
+        public UserProfile GetByIdWithPosts(int id)
         {
-            using (var conn = Connection)
             {
-                conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using (var conn = Connection)
                 {
-                    cmd.CommandText = @"
-                        INSERT INTO UserProfile (Name, Email, ImageUrl, Bio, DateCreated)
-                        OUTPUT INSERTED.ID
-                        VALUES (@Name, @Email, @ImageUrl, @Bio, @DateCreated)";
+                    conn.Open();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"SELECT 
+                            up.Id AS UserId, up.Name AS UserName, up.Email, up.ImageUrl AS UserImage, up.DateCreated AS ProfileDateCreated, up.Bio,
 
-                    DbUtils.AddParameter(cmd, "@Name", userProfile.Name);
-                    DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
-                    DbUtils.AddParameter(cmd, "@ImageUrl", userProfile.ImageUrl);
-                    DbUtils.AddParameter(cmd, "@Bio", userProfile.Bio);
-                    DbUtils.AddParameter(cmd, "@DateCreated", userProfile.DateCreated);
+                            p.Id AS PostId, p.Title AS PostTitle, p.ImageUrl AS PostImage, p.DateCreated AS PostDateCreated
 
-                    userProfile.Id = (int)cmd.ExecuteScalar();
+                          FROM post p
+                            LEFT JOIN UserProfile up  on up.Id = p.UserProfileId
+                            WHERE up.Id  = @Id";
+
+
+                        DbUtils.AddParameter(cmd, "@Id", id);
+
+                        var reader = cmd.ExecuteReader();
+
+                        UserProfile userProfile = null;
+                        while (reader.Read())
+                        {
+                            if(userProfile == null)
+                            {
+                                userProfile = new UserProfile()
+                                {
+                                    Id = DbUtils.GetInt(reader, "UserId"),
+                                    Name = DbUtils.GetString(reader, "UserName"),
+                                    Email = DbUtils.GetString(reader, "Email"),
+                                    ImageUrl = DbUtils.GetString(reader, "UserImage"),
+                                    Bio = DbUtils.GetString(reader, "Bio"),
+                                    DateCreated = DbUtils.GetDateTime(reader, "ProfileDateCreated"),
+                                    Posts = new List<Post>()
+                                };
+
+                            }
+                           
+                            if (DbUtils.IsNotDbNull(reader, "PostId"))
+                            {
+                                userProfile.Posts.Add(new Post()
+                                {
+                                    Id = DbUtils.GetInt(reader, "PostId"),
+                                    Title = DbUtils.GetString(reader, "PostTitle"),
+                                    UserProfileId = DbUtils.GetInt(reader, "UserId")
+
+                                });
+                            }
+                        }
+
+                        
+
+                        reader.Close();
+
+                        return userProfile;
+                    }
                 }
             }
         }
 
-        public void Update(UserProfile userProfile)
-        {
-            using (var conn = Connection)
+
+
+            public void Add(UserProfile userProfile)
             {
-                conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using (var conn = Connection)
                 {
-                    cmd.CommandText = @"
+                    conn.Open();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"
+                        INSERT INTO UserProfile (Name, Email, ImageUrl, Bio, DateCreated)
+                        OUTPUT INSERTED.ID
+                        VALUES (@Name, @Email, @ImageUrl, @Bio, @DateCreated)";
+
+                        DbUtils.AddParameter(cmd, "@Name", userProfile.Name);
+                        DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
+                        DbUtils.AddParameter(cmd, "@ImageUrl", userProfile.ImageUrl);
+                        DbUtils.AddParameter(cmd, "@Bio", userProfile.Bio);
+                        DbUtils.AddParameter(cmd, "@DateCreated", userProfile.DateCreated);
+
+                        userProfile.Id = (int)cmd.ExecuteScalar();
+                    }
+                }
+            }
+
+            public void Update(UserProfile userProfile)
+            {
+                using (var conn = Connection)
+                {
+                    conn.Open();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"
                         UPDATE UserProfile
                            SET [Name] = @Name,
                                Email = @Email,
@@ -127,30 +189,30 @@ namespace Gifter.Repositories
                                
                          WHERE Id = @Id";
 
-                    DbUtils.AddParameter(cmd, "@Name", userProfile.Name);
-                    DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
-                    DbUtils.AddParameter(cmd, "@ImageUrl", userProfile.ImageUrl);
-                    DbUtils.AddParameter(cmd, "@Bio", userProfile.Bio);
-                    DbUtils.AddParameter(cmd, "@DateCreated", userProfile.DateCreated);
-                    DbUtils.AddParameter(cmd, "@Id", userProfile.Id);
+                        DbUtils.AddParameter(cmd, "@Name", userProfile.Name);
+                        DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
+                        DbUtils.AddParameter(cmd, "@ImageUrl", userProfile.ImageUrl);
+                        DbUtils.AddParameter(cmd, "@Bio", userProfile.Bio);
+                        DbUtils.AddParameter(cmd, "@DateCreated", userProfile.DateCreated);
+                        DbUtils.AddParameter(cmd, "@Id", userProfile.Id);
 
-                    cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
-        }
 
-        public void Delete(int id)
-        {
-            using (var conn = Connection)
+            public void Delete(int id)
             {
-                conn.Open();
-                using (var cmd = conn.CreateCommand())
+                using (var conn = Connection)
                 {
-                    cmd.CommandText = "DELETE FROM UserProfile WHERE Id = @Id";
-                    DbUtils.AddParameter(cmd, "@id", id);
-                    cmd.ExecuteNonQuery();
+                    conn.Open();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = "DELETE FROM UserProfile WHERE Id = @Id";
+                        DbUtils.AddParameter(cmd, "@id", id);
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
         }
     }
-}

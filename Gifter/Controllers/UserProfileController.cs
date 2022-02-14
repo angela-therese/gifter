@@ -58,7 +58,16 @@ namespace Gifter.Controllers
             return NoContent();
         }
 
-      
+        [HttpGet("GetByIdWithPosts")]
+        public IActionResult GetByIdWithPosts(int id)
+        {
+            var profile = _userProfileRepository.GetByIdWithPosts(id);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+            return Ok(profile);
+        }
 
     }
 }
