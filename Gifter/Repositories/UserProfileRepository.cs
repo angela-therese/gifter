@@ -94,12 +94,13 @@ namespace Gifter.Repositories
                     using (var cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = @"SELECT 
-                            up.Id AS UserId, up.Name AS UserName, up.Email, up.ImageUrl AS UserImage, up.DateCreated AS ProfileDateCreated, up.Bio,
+                        p.Id AS PostId, p.Title AS PostTitle, p.ImageUrl AS PostImage, p.DateCreated AS PostDateCreated,
+                        up.Id AS UserId, up.Name AS UserName, up.Email, up.ImageUrl AS UserImage, up.DateCreated AS ProfileDateCreated, up.Bio
 
-                            p.Id AS PostId, p.Title AS PostTitle, p.ImageUrl AS PostImage, p.DateCreated AS PostDateCreated
+                           
 
-                          FROM post p
-                            LEFT JOIN UserProfile up  on up.Id = p.UserProfileId
+                          FROM UserProfile up
+                            FULL JOIN Post p  on up.Id = p.UserProfileId
                             WHERE up.Id  = @Id";
 
 
