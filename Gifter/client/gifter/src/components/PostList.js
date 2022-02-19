@@ -12,8 +12,9 @@ const PostList = () => {
     getAllPosts();
   }, []);
 
- 
+
   
+   
 
   return (
 

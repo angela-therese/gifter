@@ -11,9 +11,18 @@ const Post = ({ post }) => {
           <strong>{post.title}</strong>
         </p>
         <p>{post.caption}</p>
+        <p>Comments</p>
+        {post.comments.map((p) => 
+        {
+          return <p key={post.id}>{p.message}</p>
+        })
+        }
+         
       </CardBody>
     </Card>
   );
 };
 
 export default Post;
+
+
