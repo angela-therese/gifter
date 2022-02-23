@@ -16,8 +16,12 @@ export const UserProvider = (props) => {
 
 
 const getUser = (id) => {
-  return fetch(`/api/UserProfile/${id}`).then((res) => res.json());
+  return fetch(`/api/UserProfile/GetByIdWithPosts?id=${id}`).then((res) => res.json());
 };
+
+// const getUserById = (id) => {
+//   return fetch(`/api/UserProfile/GetByIdWithPosts?id=${id}`)
+// }
 
 
 
