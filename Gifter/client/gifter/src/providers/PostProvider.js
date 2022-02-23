@@ -30,10 +30,14 @@ const searchPosts = (searchTerms) => {
   .then(setPosts);
 }
 
+const getPost = (id) => {
+  return fetch(`/api/post/${id}`).then((res) => res.json());
+};
+
 
 
   return (
-    <PostContext.Provider value={{ posts, getAllPosts, addPost, searchPosts, searchTerms, setSearchTerms}}>
+    <PostContext.Provider value={{ posts, getAllPosts, getPost, addPost, searchPosts, searchTerms, setSearchTerms}}>
       {props.children}
     </PostContext.Provider>
   );

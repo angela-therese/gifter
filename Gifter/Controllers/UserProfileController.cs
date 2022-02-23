@@ -24,12 +24,12 @@ namespace Gifter.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var post = _userProfileRepository.GetById(id);
-            if (post == null)
+            var user = _userProfileRepository.GetById(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            return Ok(post);
+            return Ok(user);
         }
 
         [HttpPost]
