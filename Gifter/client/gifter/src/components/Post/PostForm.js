@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { PostContext } from "../../providers/PostProvider";
 // import PostList from "./PostList";
-import { useNavigate} from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 
 
 const currentTime = new Date();
@@ -21,7 +21,7 @@ const PostForm = () => {
 
     }
   )
-  
+   const {postId} = useParams();
   const navigate = useNavigate();
  
     const handleControlledInputChange = (event) => {
@@ -38,6 +38,7 @@ const PostForm = () => {
 
     // Stop auto refreshing
     const handleClickSavePost = (event) => {
+
       event.preventDefault() //Prevents the browser from submitting the form
       const newPost = { ...post}
       addPost(post).then((p) => {
@@ -47,37 +48,76 @@ const PostForm = () => {
       })
     }
     
+    if(postId){
 
-    return (
-      <div>
-      <form className="postForm">
-          <h2 className="postForm__title">New Post</h2>
-          <fieldset>
-              <div className="form-group">
-                  <label htmlFor="title">Post title:</label>
-                  <input type="text" id="title" onChange={handleControlledInputChange} required autoFocus className="form-control" placeholder="Post title" value={post.title}/>
-              </div>
-          </fieldset>
-          <fieldset>
-          <div className="form-group">
-                  <label htmlFor="imageUrl">Image Url:</label>
-                  <input type="text" id="imageUrl" onChange={handleControlledInputChange} required autoFocus className="form-control" placeholder="Image Url" value={post.imageUrl}/>
-              </div>
-          </fieldset>
-          <fieldset>
-          <div className="form-group">
-                  <label htmlFor="caption">Post caption:</label>
-                  <input type="text" id="caption" onChange={handleControlledInputChange} required autoFocus className="form-control" placeholder="Post caption" value={post.caption}/>
-              </div>
-              
-          </fieldset>
-          <button className="btn btn-primary"
-            onClick={handleClickSavePost}>
-            Save Post
-          </button>
-      </form>
-      {/* <PostList /> */}
-      </div>
-    )
+      return (
+        <div>
+        <form className="postForm">
+            <h2 className="postForm__title">{postId ? <>Edit Post</> : <>New Post</>}</h2>
+            <fieldset>
+                <div className="form-group">
+                    <label htmlFor="title">Post title:</label>
+                    <input type="text" id="title" onChange={ handleControlledInputChange} required autoFocus className="form-control" placeholder="Post title" value={post.title}/>
+                </div>
+            </fieldset>
+            <fieldset>
+            <div className="form-group">
+                    <label htmlFor="imageUrl">Image Url:</label>
+                    <input type="text" id="imageUrl" onChange={handleControlledInputChange} required autoFocus className="form-control" placeholder="Image Url" value={post.imageUrl}/>
+                </div>
+            </fieldset>
+            <fieldset>
+            <div className="form-group">
+                    <label htmlFor="caption">Post caption:</label>
+                    <input type="text" id="caption" onChange={handleControlledInputChange} required autoFocus className="form-control" placeholder="Post caption" value={post.caption}/>
+                </div>
+                
+            </fieldset>
+            <button className="btn btn-primary"
+              onClick={handleClickSavePost}>
+              Save Post
+            </button>
+        </form>
+        {/* <PostList /> */}
+        </div>
+      )
+    }
+
+    else{
+      return (
+        <div>
+        <form className="postForm">
+            <h2 className="postForm__title">{postId ? <>Edit Post</> : <>New Post</>}</h2>
+            <fieldset>
+                <div className="form-group">
+                    <label htmlFor="title">Post title:</label>
+                    <input type="text" id="title" onChange={ handleControlledInputChange} required autoFocus className="form-control" placeholder="Post title" value={post.title}/>
+                </div>
+            </fieldset>
+            <fieldset>
+            <div className="form-group">
+                    <label htmlFor="imageUrl">Image Url:</label>
+                    <input type="text" id="imageUrl" onChange={handleControlledInputChange} required autoFocus className="form-control" placeholder="Image Url" value={post.imageUrl}/>
+                </div>
+            </fieldset>
+            <fieldset>
+            <div className="form-group">
+                    <label htmlFor="caption">Post caption:</label>
+                    <input type="text" id="caption" onChange={handleControlledInputChange} required autoFocus className="form-control" placeholder="Post caption" value={post.caption}/>
+                </div>
+                
+            </fieldset>
+            <button className="btn btn-primary"
+              onClick={handleClickSavePost}>
+              Save Post
+            </button>
+        </form>
+        {/* <PostList /> */}
+        </div>
+      )
+    
+
+    }
+  
   };
 export default PostForm;

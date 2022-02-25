@@ -19,9 +19,11 @@ const ApplicationViews = () => {
         {/* <PostForm /> */}
       </Route>
 
+     < Route path="/post/edit/:id" element={<PostForm/>}>
+     </Route>
+
       <Route path="/post/:id" element={<PostDetails/>} >
       </Route>
-
      
       <Route path="/users" element={<UserList/>}>
       </Route>
