@@ -4,11 +4,24 @@ import { Link } from "react-router-dom";
 
 
 
+
+
+const handleClickSubscribe = () => {
+   
+}
+
+
+
 const User = ({ user }) => {
   return (
     <Card className="m-4">
+      <div>
       <p className="text-left px-2">{user.name}</p>
-      {user.posts.map((p) => {
+        <button onClick={handleClickSubscribe}>Subscribe</button>
+      </div>
+      
+      
+      {user.posts?.map((p) => {
         return (
           // 
           <>

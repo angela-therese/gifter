@@ -33,9 +33,10 @@ const Post = ({ post }) => {
         </Link>
         <p>{post.caption}</p>
        <section>
-         <Link to={`/post/edit/${post.id}`}>
-        <button>Edit</button>
-       </Link>
+        <button onClick={() => {
+          navigate(`/post/edit/${post.id}`)
+        }}>Edit</button>
+       
         <button onClick={handlePostDelete}>Delete</button>
        
        </section>

@@ -10,7 +10,7 @@ export const PostProvider = (props) => {
   const [searchTerms, setSearchTerms] = useState("")
 
   const getAllPosts = () => {
-    return fetch("/api/post/GetWithComments")
+    return fetch("/api/post/")
       .then((res) => res.json())
       .then(setPosts);
   };

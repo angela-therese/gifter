@@ -18,7 +18,6 @@ const PostDetails = () => {
   }
 
   
-  
   function countLikes(){
     
       setCount(count + 1)

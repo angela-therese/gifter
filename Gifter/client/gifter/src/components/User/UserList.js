@@ -25,6 +25,7 @@ const UserList = () => {
         {users.map((user) => (
             <User key={user.id} user={user} />
           ))}
+          
 
         {/* //MAP WITHOUT CARD */}
           {/* {users.map((user) => 
