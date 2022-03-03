@@ -26,7 +26,7 @@ namespace Gifter.Repositories
                        up.ImageUrl AS UserProfileImageUrl
                   FROM Post p 
                        LEFT JOIN UserProfile up ON p.UserProfileId = up.id
-              ORDER BY p.DateCreated";
+              ORDER BY p.DateCreated DESC";
 
                     var reader = cmd.ExecuteReader();
 
@@ -78,7 +78,7 @@ namespace Gifter.Repositories
                      FROM Post p
                        LEFT JOIN UserProfile up ON p.UserProfileId = up.id
                        LEFT JOIN Comment c on c.PostId = p.id
-                     ORDER BY p.DateCreated";
+                     ORDER BY p.DateCreated DESC";
 
                     var reader = cmd.ExecuteReader();
 
@@ -344,9 +344,12 @@ namespace Gifter.Repositories
                         p.ImageUrl AS PostImageUrl, p.UserProfileId,
 
                         up.Name, up.Bio, up.Email, up.DateCreated AS UserProfileDateCreated, 
-                        up.ImageUrl AS UserProfileImageUrl
+                        up.ImageUrl AS UserProfileImageUrl,
+
+                        c.Message
                     FROM Post p 
                         LEFT JOIN UserProfile up ON p.UserProfileId = up.id
+                        LEFT JOIN Comment c ON p.Id = c.PostId
                     WHERE p.Title LIKE @Criterion OR p.Caption LIKE @Criterion";
 
                     if (sortDescending)
@@ -381,8 +384,23 @@ namespace Gifter.Repositories
                                 DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
                                 ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
                             },
-                        });
+                           
+                            Comments = new List<Comment>
+                            {
+                                (new Comment()
+
+                            {
+                                Message = DbUtils.GetString(reader, "Message")
+                                
+                            })
                     }
+
+
+                        });
+
+                       
+
+                        }
 
                     reader.Close();
 

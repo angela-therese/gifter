@@ -132,6 +132,7 @@ namespace Gifter.Repositories
                                 {
                                     Id = DbUtils.GetInt(reader, "PostId"),
                                     Title = DbUtils.GetString(reader, "PostTitle"),
+                                    ImageUrl = DbUtils.GetString(reader, "PostImage"),
                                     UserProfileId = DbUtils.GetInt(reader, "UserId")
 
                                 });

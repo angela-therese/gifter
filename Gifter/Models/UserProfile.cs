@@ -6,6 +6,10 @@ namespace Gifter.Models
 {
     public class UserProfile
     {
+        public static int CURRENT_USER_PROFILE_ID
+        {
+            get { return 4; }
+        }
         public int Id { get; set; }
 
         [Required]
