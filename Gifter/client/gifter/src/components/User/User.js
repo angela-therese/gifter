@@ -14,6 +14,8 @@ const handleClickSubscribe = () => {
 
 const User = ({ user }) => {
   return (
+    <>
+    <h1>{user.name}'s Profile</h1>
     <Card className="m-4">
       <div>
       <p className="text-left px-2">{user.name}</p>
@@ -38,6 +40,7 @@ const User = ({ user }) => {
       })}
       
     </Card>
+    </>
   );
 };
 

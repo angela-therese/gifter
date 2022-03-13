@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { UserContext } from "../../providers/UserProvider";
+import { UserContext } from "../../providers/UserProfileProvider";
 import { useParams } from "react-router-dom";
 import User from "./User"
 

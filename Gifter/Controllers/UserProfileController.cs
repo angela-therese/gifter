@@ -21,6 +21,18 @@ namespace Gifter.Controllers
             return Ok(_userProfileRepository.GetAll());
         }
 
+        [HttpGet("GetByEmail")]
+        public IActionResult GetByEmail(string email)
+        {
+            var user = _userProfileRepository.GetByEmail(email);
+            if (email == null || user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -32,11 +44,19 @@ namespace Gifter.Controllers
             return Ok(user);
         }
 
+        //[HttpPost]
+        //public IActionResult UserProfile(UserProfile userProfile)
+        //{
+        //    _userProfileRepository.Add(userProfile);
+        //    return CreatedAtAction("Get", new { id = userProfile.Id }, userProfile);
+        //}
+
+
         [HttpPost]
-        public IActionResult UserProfile(UserProfile userProfile)
+        public IActionResult Post(UserProfile user)
         {
-            _userProfileRepository.Add(userProfile);
-            return CreatedAtAction("Get", new { id = userProfile.Id }, userProfile);
+            _userProfileRepository.Add(user);
+            return CreatedAtAction("GetByEmail", new { email = user.Email }, user);
         }
 
         [HttpPut("{id}")]

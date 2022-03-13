@@ -20,6 +20,7 @@ const PostList = () => {
 
     
     <div className="container">
+       <h1>Welcome to Gifter!</h1>
         <PostSearch />
         
       <div className="row justify-content-center">

@@ -165,16 +165,52 @@ namespace Gifter.Repositories
 
                         DbUtils.AddParameter(cmd, "@Name", userProfile.Name);
                         DbUtils.AddParameter(cmd, "@Email", userProfile.Email);
-                        DbUtils.AddParameter(cmd, "@ImageUrl", userProfile.ImageUrl);
-                        DbUtils.AddParameter(cmd, "@Bio", userProfile.Bio);
-                        DbUtils.AddParameter(cmd, "@DateCreated", userProfile.DateCreated);
+                    DbUtils.AddParameter(cmd, "@ImageUrl", userProfile.ImageUrl);
+                    DbUtils.AddParameter(cmd, "@Bio", userProfile.Bio);
+                    DbUtils.AddParameter(cmd, "@DateCreated", userProfile.DateCreated);
 
                         userProfile.Id = (int)cmd.ExecuteScalar();
                     }
                 }
             }
 
-            public void Update(UserProfile userProfile)
+        public UserProfile GetByEmail(string email)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                          SELECT Id, Name, Email, ImageUrl, Bio, DateCreated FROM UserProfile WHERE Email = @email";
+                    cmd.Parameters.AddWithValue("@email", email);
+
+
+
+                    var reader = cmd.ExecuteReader();
+
+                    UserProfile user = null;
+                    if (reader.Read())
+                    {
+                        user = new UserProfile()
+                        {
+                            Id = DbUtils.GetInt(reader, "Id"),
+                            Name = DbUtils.GetString(reader, "Name"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                            Bio = DbUtils.GetString(reader, "Bio"),
+                           DateCreated = DbUtils.GetDateTime(reader, "DateCreated")
+                        };
+                    }
+
+                    reader.Close();
+
+                    return user;
+                }
+            }
+        }
+
+        public void Update(UserProfile userProfile)
             {
                 using (var conn = Connection)
                 {

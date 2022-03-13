@@ -19,9 +19,6 @@ const getUser = (id) => {
   return fetch(`/api/UserProfile/GetByIdWithPosts?id=${id}`).then((res) => res.json());
 };
 
-// const getUserById = (id) => {
-//   return fetch(`/api/UserProfile/GetByIdWithPosts?id=${id}`)
-// }
 
 
 
@@ -30,4 +27,7 @@ const getUser = (id) => {
       {props.children}
     </UserContext.Provider>
   );
+
 };
+
+
